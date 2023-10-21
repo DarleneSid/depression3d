@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 00:21:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/20 23:38:59 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/21 23:49:09 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ int	check_valid_chars(t_data *data, char *s)
 			i++;
 		else if (s[i] == 'N' || s[i] == 'S' || s[i] == 'E' || s[i] == 'W')
 		{
-			data->pos--;
+			data->pos++;
 			i++;
 		}
 		else
@@ -139,7 +139,7 @@ char **check_map(t_data *data, int cur_row)
 
 	row = 0;
 	int i = 1;
-	data->pos = 1;
+	data->pos = 0;
 	data->h_map = data->height - cur_row;
 	map = ft_calloc(sizeof(char *), (data->h_map + 1));
 	if (!map)
@@ -151,7 +151,7 @@ char **check_map(t_data *data, int cur_row)
 		cur_row++;
 		while((i < data->h_map) && check_valid_char(data->map[cur_row]))
 		{
-			if (check_valid_chars(data, data->map[cur_row]) && i < data->h_map && data->pos >= 0)
+			if (check_valid_chars(data, data->map[cur_row]) && i < data->h_map && data->pos < 2)
 			{
 				map[row] = ft_strdup(data->map[cur_row]);
 				if (data->map[cur_row][0] == '\n' || data->map[cur_row][0] == '\0')
@@ -163,11 +163,11 @@ char **check_map(t_data *data, int cur_row)
 				if (i < data->h_map && data->map[cur_row] && !check_valid_char(data->map[cur_row]))
 					return (printf("NOT VALID MAP\n"), free_dstr(map), NULL);
 			}
-			else if (check_valid_char(data->map[cur_row]) && data->pos < 0)
-				return (printf("NOT VALID MAP\n"), free_dstr(map), NULL);
 			else
 				return (printf("NOT VALID MAP\n"), free_dstr(map), NULL);
 		}
+		if (data->pos == 0)
+			return (printf("NOT VALID MAP\n"), free_dstr(map), NULL);
 	}
 	else
 		return (ft_printf("NOT VALID MAP\n"), NULL);
@@ -235,6 +235,8 @@ int	parsing(t_data *data, char *file)
 	close(fd);
 	if (all_stuff_map(data) == -1)
 		return (1);
+	if (check_borders(data) == -1)
+		return (printf("kek not valid\n"), 1);
 	printf("h %d\n", data->height);
 	printf("h map %d\n", data->h_map);
 	int k = 0;

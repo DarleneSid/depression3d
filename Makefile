@@ -4,7 +4,7 @@ DIR_SRCS		=	srcs
 
 DIR_OBJS		=	objs
 
-SRCS_NAMES		=	main.c map.c is_what.c
+SRCS_NAMES		=	main.c map.c is_what.c checking_borders.c
 
 OBJS_NAMES		=	${SRCS_NAMES:.c=.o}
 

@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 21:36:40 by pferreir          #+#    #+#             */
-/*   Updated: 2023/10/17 22:12:00 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/21 19:26:13 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ typedef struct t_data
 	int		h_map;
 	int		cnt_1;
 	int		height;
+	int		len_map;
 	int		all_inside;
 	char	**map;
 	char	**data;
@@ -46,5 +47,6 @@ int			is_ceiling(t_data *data, char *s);
 int			check_valid_char(char *s);
 int			parsing(t_data *data, char *file);
 void		free_dstr(char **dstr);
+int			check_borders(t_data *data);
 
 #endif
