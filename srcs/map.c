@@ -6,44 +6,11 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 00:21:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/21 23:49:09 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/23 23:09:05 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
-
-int	height_of_map(int fd)
-{
-	int			i;
-	char		*tmp;
-
-	i = 0;
-	tmp = get_next_line(fd);
-	if (!tmp)
-		return (-1);
-	while (tmp)
-	{
-		i++;
-		free(tmp);
-		tmp = get_next_line(fd);
-		// if (!tmp)
-		// 	return (-1);
-	}
-	return (i);
-}
-//why if i protect its error?
-
-void	free_dstr(char **dstr)
-{
-	int	i;
-
-	if (!dstr)
-		return ;
-	i = 0;
-	while (dstr[i])
-		free(dstr[i++]);
-	free(dstr);
-}
 
 int	invalid_start(t_data *data, char *s)
 {
@@ -61,6 +28,58 @@ int	invalid_start(t_data *data, char *s)
 		i++;
 	}
 	return (0);
+}
+
+int	invalid_row(char *s)
+{
+	int	i;
+	
+	i = 0;
+	while (s[i])
+	{
+		if (ft_isascii(s[i]) || s[i] == '\n' || s[i] == '\0')
+			i++;
+		else
+			return (0);
+	}
+	return (1);
+}
+
+int	height_of_map(int fd)
+{
+	int			i;
+	char		*tmp;
+
+	i = 0;
+	tmp = get_next_line(fd);
+	if (!tmp)
+		return (-1);
+	if (!invalid_row(tmp))
+		return (free(tmp), printf("What did you put in this map?! Invalid!\n"), 1);
+	while (tmp)
+	{
+		i++;
+		free(tmp);
+		tmp = get_next_line(fd);
+		if (!tmp)
+			return (i);
+		// can i do it???
+		if (tmp && !invalid_row(tmp))
+			return (free(tmp), printf("What did you put in this map?! Invalid!\n"), 1);
+	}
+	return (i);
+}
+
+void	free_dstr(char **dstr)
+{
+	int	i;
+
+	if (!dstr)
+		return ;
+	i = 0;
+	while (dstr[i])
+		free(dstr[i++]);
+	free(dstr);
 }
 
 int	check_valid_chars(t_data *data, char *s)
@@ -104,6 +123,7 @@ int	check_valid_char(char *s)
 	return (0);
 }
 
+
 int	init_map(t_data *data, int fd)
 {
 	int			row;
@@ -121,6 +141,10 @@ int	init_map(t_data *data, int fd)
 	while (tmp && i < data->height)
 	{
 		map[row] = ft_strdup(tmp);
+		if (!tmp)
+			return (1);
+		if (tmp && !invalid_row(map[row]))
+			return (free(tmp), 1);
 		row++;
 		free(tmp);
 		tmp = get_next_line(fd);
@@ -231,7 +255,8 @@ int	parsing(t_data *data, char *file)
 	fd = open(file, O_RDONLY);
 	if (fd == -1)
 		(ft_printf("Not valid fd!\n"), exit(0));
-	init_map(data, fd);
+	if (init_map(data, fd))
+		return (close(fd), 1);
 	close(fd);
 	if (all_stuff_map(data) == -1)
 		return (1);

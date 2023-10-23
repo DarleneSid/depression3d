@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 17:57:31 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/22 00:32:58 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/23 23:28:46 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,25 +46,29 @@ void	len_map(t_data *data)
 	}
 }
 
+int	nospc(char c)
+{
+	if (c != ' ' && c != '\n' && c != '\t')
+		return (1);
+	return (0);
+}
+
 int	check_borders(t_data *data)
 {
 	int	x;
 	int	y;
 	
-	x = 1;
+	x = 0;
 	len_map(data);
-	printf("%d\n", data->len_map);
-	while (data->work_map[x] && x < data->len_map)
+	while (data->work_map[x] && x < data->h_map)
 	{
-		y = 1;
-		while (data->work_map[x][y] && y < data->h_map)
+		y = 0;
+		while (data->work_map[x][y] && y < data->len_map)
 		{
-			if (zero_or_letter(data->work_map[x][y]) &&  data->work_map[x - 1][y] != ' ' &&
-				data->work_map[x + 1][y] != ' ' && data->work_map[x - 1][y - 1] != ' ' && data->work_map[x][y - 1] != ' ' &&
-				data->work_map[x + 1][y - 1] != ' ' && data->work_map[x - 1][y + 1] != ' ' && data->work_map[x][y + 1] != ' ' &&
-				data->work_map[x + 1][y + 1] != ' ')
+			if (data->work_map[x][y] == ' ' || data->work_map[x][y] == '1' || data->work_map[x][y] == '\n')
 				y++;
-			else if (data->work_map[x][y] == ' ' || data->work_map[x][y] == '1')
+			else if (x > zero_or_letter(data->work_map[x][y]) &&  nospc(data->work_map[x - 1][y]) && nospc(data->work_map[x + 1][y]) &&
+				nospc(data->work_map[x][y - 1]) && nospc(data->work_map[x][y + 1]))
 				y++;
 			else
 				return (printf("suka\n"), -1);
