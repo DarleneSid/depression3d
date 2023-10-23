@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 22:09:26 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/20 23:59:37 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 00:55:50 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,35 @@ int	is_ceiling(t_data *data, char *s)
 	return (1);
 }
 
+int	valid_for_path(char *s)
+{
+	int	i;
+
+	i = 3;
+	while (s[i])
+	{
+		if (is_alpha(s[i]) || is_digit(s[i]) || s[i] == '/' || s[i] == '.')
+			i++;
+		else
+			return (0);
+	}
+	return (1);
+}
+
+
+int	is_no(t_data *data, char *s)
+{
+	if (s[0] != 'N')
+		return (-1);
+	if (s[1] != 'O')
+		return (-1);
+	if (s[1] != ' ')
+		return (-1);
+	// 1 space or ???
+	if (!valid_for_path(s))
+		return (0);
+	return (1);
+}
 // int	is_path(t_data *data, char *s)
 // {
 // 	int	i;
@@ -98,3 +127,6 @@ int	is_ceiling(t_data *data, char *s)
 	// 	return (ft_printf("Path has to end with .xpm!\n"), 1);
 	
 // }
+
+//how to check directory???
+//ok i stack all string and? check is it exist or no??
