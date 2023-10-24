@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 22:09:26 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/24 23:39:47 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 23:55:02 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,10 @@ int	valid_for_path(char *s)
 	int	i;
 
 	i = 0;
+	while (s[i] == '1' || s[i] == ' ' || s[i] == '\t')
+			i++;;
+	if (s[i] == '\n' || s[i] =='\0')
+		return (0);
 	while (s[i] && s[i] != '\n')
 	{
 		if (ft_isalpha(s[i]) || ft_isdigit(s[i]) || s[i] == '/' || s[i] == '.'|| s[i] == ' ' || s[i] == '\t')
@@ -154,7 +158,16 @@ int	is_path(char *s)
 	printf("[%s]", &tmp[ft_strlen(tmp) - 4]);
 	printf("tmp:%s\n", tmp);
 	if (ft_strncmp(&tmp[ft_strlen(tmp) - 4], ".xpm\0", 5))
-		return (ft_printf("ggg\n"), 0);
+		return (0);
+	i = 2;
+	while (tmp[i] == ' ' || tmp[i] == '\t')
+		i++;
+	while (tmp[i])
+	{
+		if (tmp[i] == ' ' || tmp[i] == '\t')
+			return(0);
+		i++;
+	}
 	return (1);
 }
 

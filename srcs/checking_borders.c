@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 17:57:31 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/23 23:28:46 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/25 00:17:40 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,13 +57,17 @@ int	check_borders(t_data *data)
 {
 	int	x;
 	int	y;
+	int	len;
+	int	height;
 	
-	x = 0;
+	x = 1;
 	len_map(data);
-	while (data->work_map[x] && x < data->h_map)
+	len = data->len_map - 1;
+	height = data->h_map - 1;
+	while (data->work_map[x] && x < height)
 	{
-		y = 0;
-		while (data->work_map[x][y] && y < data->len_map)
+		y = 1;
+		while (data->work_map[x][y] && y < len)
 		{
 			if (data->work_map[x][y] == ' ' || data->work_map[x][y] == '1' || data->work_map[x][y] == '\n')
 				y++;
@@ -77,3 +81,10 @@ int	check_borders(t_data *data)
 	}
 	return (0);
 }
+
+
+// check first column, last row, last colum
+//handle spaces after xpm
+//floodfill???
+//islands on map??
+// floor ceill - can be spaces between r g b??

@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 00:21:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/24 23:36:42 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 23:44:10 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,6 +213,7 @@ int	all_stuff_map(t_data *data)
 				printf("my row ((%s))", data->map[row]);
 				// set_path(data, data->map[row]);
 				row++;
+			
 			}
 			else if (is_floor(data, data->map[row]) != -1)
 			{
