@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 00:21:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/23 23:09:05 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 23:36:42 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,17 +201,20 @@ char **check_map(t_data *data, int cur_row)
 int	all_stuff_map(t_data *data)
 {
 	int			row;
-
+	
 	row = 0;
 	data->all_inside = 6;
 	while (data->map[row])
 	{	
 		while (data->map[row])
 		{
-			//if is_path
-			// 	// : NO SO WE EA
-			// check_all_path??
-			if (is_floor(data, data->map[row]) != -1)
+			if (data->map[row][0] != '\n' && is_path(data->map[row]))
+			{
+				printf("my row ((%s))", data->map[row]);
+				// set_path(data, data->map[row]);
+				row++;
+			}
+			else if (is_floor(data, data->map[row]) != -1)
 			{
 				data->all_inside--;
 				row++;
@@ -223,12 +226,12 @@ int	all_stuff_map(t_data *data)
 			}
 			else if (data->map[row][0] == '\n')
 				row++;
-			else if (is_floor(data, data->map[row]) == -1 && is_ceiling(data, data->map[row]) == -1 && data->map[row][0] != '\n' &&  invalid_start(data, data->map[row]))
-				return (ft_printf("NOT VALID MAP\n"), -1);
+			else if (is_floor(data, data->map[row]) == -1 && is_ceiling(data, data->map[row]) == -1 && data->map[row][0] != '\n' &&  invalid_start(data, data->map[row]) && !is_path(data->map[row]))
+				return (ft_printf("NOT VALID MAPeeee: (((((%s))))\n", data->map[row]), -1);
 			else if (invalid_start(data, data->map[row]) == 0)
 				break ;
 			else
-				return (ft_printf("NOT VALID MAP\n"), -1);
+				return (ft_printf("NOT VALID MAPdddd\n"), -1);
 		}
 		if (invalid_start(data, data->map[row]) == 0)
 		{
@@ -238,7 +241,7 @@ int	all_stuff_map(t_data *data)
 			break ;
 		}
 		else
-			return (ft_printf("NOT VALID MAP\n"), -1);
+			return (ft_printf("NOT VALID MAPtttttt\n"), -1);
 	}
 	return (0);
 }

@@ -6,13 +6,13 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 16:20:34 by dsydelny          #+#    #+#             */
-/*   Updated: 2022/12/01 14:37:22 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 23:08:24 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+int	ft_strlen(const char *s)
 {
 	int	cnt;
 

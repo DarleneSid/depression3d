@@ -6,16 +6,16 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 12:40:09 by dsydelny          #+#    #+#             */
-/*   Updated: 2022/12/01 14:35:10 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 23:09:45 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, int start, int len)
 {
 	char	*s1;
-	size_t	cnt;
+	int		cnt;
 
 	if (!s)
 		return (NULL);

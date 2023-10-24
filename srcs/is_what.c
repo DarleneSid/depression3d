@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 22:09:26 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/24 00:55:50 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 23:39:47 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,49 +84,115 @@ int	valid_for_path(char *s)
 {
 	int	i;
 
-	i = 3;
-	while (s[i])
+	i = 0;
+	while (s[i] && s[i] != '\n')
 	{
-		if (is_alpha(s[i]) || is_digit(s[i]) || s[i] == '/' || s[i] == '.')
+		if (ft_isalpha(s[i]) || ft_isdigit(s[i]) || s[i] == '/' || s[i] == '.'|| s[i] == ' ' || s[i] == '\t')
 			i++;
 		else
 			return (0);
 	}
-	return (1);
+	if (s[i] == '\n' || s[i] =='\0')
+		return (1);
+	else
+		return (0);
 }
 
 
-int	is_no(t_data *data, char *s)
+char	*is_no(char *s)
 {
+	int		i;
+	int		j;
+	char	*path;
+	
+	i = 2;
+	j = 0;
+	path = malloc(sizeof(char *) * ft_strlen(s));
+	if (!path)
+		return NULL;
 	if (s[0] != 'N')
-		return (-1);
+		return (NULL);
 	if (s[1] != 'O')
-		return (-1);
-	if (s[1] != ' ')
-		return (-1);
-	// 1 space or ???
+		return (NULL);
+	while (s[i] == ' ' || s[i] == '\t')
+		i++;
+	while (s[i] && (ft_isalpha(s[i]) || ft_isdigit(s[i]) || s[i] == '/' || s[i] == '.'))
+	{
+		path[j] = s[i];
+		i++;
+		j++;
+	}
+	if (s[i] != '\n')
+		return NULL;
+	path[j] = '\0';
+	return (path);
+}
+
+int	is_path(char *s)
+{
+	int i;
+	char	*tmp;
+	
+	
+	printf("my %s\n", s);
+	printf("len %d\n", ft_strlen(s));
 	if (!valid_for_path(s))
 		return (0);
+	if (s[ft_strlen(s) - 1] == '\n')
+		s[ft_strlen(s) - 1] = '\0';
+	tmp = malloc(sizeof(char) * (ft_strlen(s)));
+	if (!tmp)
+		return (0);
+	printf("here\n");
+	i = 0;
+	while (i < (ft_strlen(s)))
+	{
+		tmp[i] = s[i];
+		i++;
+	}
+	tmp[i] = '\0';
+	printf("[%s]", &tmp[ft_strlen(tmp) - 4]);
+	printf("tmp:%s\n", tmp);
+	if (ft_strncmp(&tmp[ft_strlen(tmp) - 4], ".xpm\0", 5))
+		return (ft_printf("ggg\n"), 0);
 	return (1);
 }
-// int	is_path(t_data *data, char *s)
+
+// int	set_path(t_data *data, char *s)
 // {
-// 	int	i;
-
-// 	i = 0;
-// 	if (ft_strncmp(s, "NO ", 3))
-// 	{
-		
-// 	}
-// 	if (ft_strncmp(s, "SO ", 3))
-// 	if (ft_strncmp(s, "EA ", 3))
-// 	if (ft_strncmp(s, "WE ", 3))
-
-
-	// if (ft_strncmp(char *path, ".xpm\0", 5))
-	// 	return (ft_printf("Path has to end with .xpm!\n"), 1);
+// 	char	*tmp;
 	
+// 	if (is_path(s))
+// 	{
+// 		tmp = is_no(s);
+// 		data->no_path = ft_strdup(tmp);
+// 		data->all_inside--;
+// 	}
+	// else if (is_path(s) && is_so(s) != NULL)
+	// {
+	// 	tmp = is_so(s);
+	// 	data->so_path = ft_strdup(tmp);
+	// 	data->all_inside--;
+	// }
+	// else if (is_path(s) && is_we(s) != NULL)
+	// {
+	// 	tmp = is_we(s);
+	// 	data->we_path = ft_strdup(tmp);
+	// 	data->all_inside--;
+	// }
+	// else if (is_path(s) && is_ea(s) != NULL)
+	// {
+	// 	tmp = is_ea(s);
+	// 	data->ea_path = ft_strdup(tmp);
+	// 	data->all_inside--;
+	// }
+// 	else
+// 		return (0);
+// 	return (1);
 // }
 
 //how to check directory???
 //ok i stack all string and? check is it exist or no??
+
+	// if (ft_strncmp(char *path, ".xpm\0", 5))
+	// 	return (ft_printf("Path has to end with .xpm!\n"), 1);

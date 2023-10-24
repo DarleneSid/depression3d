@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/12 18:27:13 by dsydelny          #+#    #+#             */
-/*   Updated: 2022/12/01 14:43:24 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 23:10:34 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,8 +48,8 @@ int	ft_secondcut(char const *s1, char const *set)
 
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	size_t	cnt;
-	size_t	cntb;
+	int		cnt;
+	int		cntb;
 	int		cnt1;
 	char	*strim;
 

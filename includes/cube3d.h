@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/25 21:36:40 by pferreir          #+#    #+#             */
-/*   Updated: 2023/10/21 19:26:13 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/24 21:43:28 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,10 @@ typedef struct t_data
 	int		height;
 	int		len_map;
 	int		all_inside;
+	char	*no_path;
+	char	*so_path;
+	char	*we_path;
+	char	*ea_path;
 	char	**map;
 	char	**data;
 	char	**work_map;
@@ -43,6 +47,8 @@ typedef struct t_data
 /*		IS_WHAT		*/
 int			is_floor(t_data *data, char *s);
 int			is_ceiling(t_data *data, char *s);
+int			set_path(t_data *data, char *s);
+int			is_path(char *s);
 
 int			check_valid_char(char *s);
 int			parsing(t_data *data, char *file);
