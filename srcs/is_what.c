@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 22:09:26 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/27 01:28:57 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/27 23:36:03 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,13 @@ int	is_floor(t_data *data, char *s)
 	int number = 0;
 	int count = 0;
 	
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] != ' ' && s[i] != ',' && s[i] != '\t' && !ft_isdigit(s[i]) && s[i] != 'F' && s[i] != '\n')
+			return (-1);
+		i++;
+	}
 	i = 0;
 	while (s[i] == ' ' || s[i] == '\t')
 		i++;
@@ -44,6 +51,7 @@ int	is_floor(t_data *data, char *s)
 		count++;
 	}
 	free_dstr(ithinkdifferent);
+	data->f_here++;
 	return (1);
 }
 
@@ -53,6 +61,13 @@ int	is_ceiling(t_data *data, char *s)
 	char	**ithinkdifferent;
 	int number = 0;
 	int count = 0;
+	i = 0;
+	while (s[i])
+	{
+		if (s[i] != ' ' && s[i] != ',' && s[i] != '\t' && !ft_isdigit(s[i]) && s[i] != 'C' && s[i] != '\n')
+			return (-1);
+		i++;
+	}
 	i = 0;
 	while (s[i] == ' ' || s[i] == '\t')
 		i++;
@@ -78,6 +93,7 @@ int	is_ceiling(t_data *data, char *s)
 		count++;
 	}
 	free_dstr(ithinkdifferent);
+	data->c_here++;
 	return (1);
 }
 
@@ -104,13 +120,12 @@ int	valid_for_path(char *s)
 }
 
 
-int	is_path(char *s)
+int	is_path(t_data *data, char *s)
 {
 	int i;
 	int	no_spc;
 	int	start;
 	int	end;
-	char	*tmp;
 	
 	i = 0;
 	no_spc = ft_strlen(s) - 1;
@@ -126,98 +141,151 @@ int	is_path(char *s)
 	end = no_spc;
 	while (s[i] == ' ' || s[i] == '\t')
 		i++;
-	tmp = malloc(sizeof(char) * (end + 1 - i));
-	if (!tmp)
+	data->tmp_path = malloc(sizeof(char) * (end + 2 - i));
+	if (!data->tmp_path)
 		return (0);
 	start = 0;
-	printf("end %d\n", end);
-	printf("i %d\n", i);
-	printf("len %d\n", ft_strlen(s) - 1);
-	printf("no spc %d\n", no_spc);
 	end -= i;
 	while (i <= no_spc && start <= end)
 	{
-		tmp[start] = s[i];
+		data->tmp_path[start] = s[i];
 		start++;
 		i++;
 	}
-	tmp[start] = '\0';
-	printf("now:[%s]\n", tmp);
-	if (ft_strncmp(&tmp[ft_strlen(tmp) - 4], ".xpm\0", 5))
+	data->tmp_path[start] = '\0';
+	if (ft_strncmp(&data->tmp_path[ft_strlen(data->tmp_path) - 4], ".xpm\0", 5))
 		return (0);
 	start = 2;
-	while (tmp[start] == ' ' || tmp[start] == '\t')
+	while (data->tmp_path[start] == ' ' || data->tmp_path[start] == '\t')
 		start++;
+	data->len_path = end - start + 1;
 	while (end >= start)
 	{
-		if (tmp[start] == ' ' || tmp[start] == '\t')
+		if (data->tmp_path[start] == ' ' || data->tmp_path[start] == '\t')
 			return (0);
 		start++;
 	}
-	if (tmp[start] == '\0')
+	if (data->tmp_path[start] == '\0')
 		return (1);
-	printf("[%s]\n", &tmp[start]);
 	return (0);
 }
 
-char	*is_no(char *s)
+int	is_no(t_data *data)
 {
 	int		i;
 	int		j;
-	char	*path;
 	
 	i = 2;
-	j = 0;
-	path = malloc(sizeof(char *) * ft_strlen(s));
-	if (!path)
-		return NULL;
-	if (s[0] != 'N')
-		return (NULL);
-	if (s[1] != 'O')
-		return (NULL);
-	while (s[i] == ' ' || s[i] == '\t')
+	if (data->tmp_path[0] != 'N')
+		return (0);
+	if (data->tmp_path[1] != 'O')
+		return (0);
+	while (data->tmp_path[i] == ' ' || data->tmp_path[i] == '\t')
 		i++;
-	while (s[i] && (ft_isalpha(s[i]) || ft_isdigit(s[i]) || s[i] == '/' || s[i] == '.'))
+	data->no_path = malloc(sizeof(char *) * data->len_path);
+	if (!data->no_path)
+		return (0);
+	j = 0;
+	while (data->tmp_path[i] && data->tmp_path[i] != '\t' && data->tmp_path[i] != ' ')
 	{
-		path[j] = s[i];
+		data->no_path[j] = data->tmp_path[i];
 		i++;
 		j++;
 	}
-	if (s[i] != '\n')
-		return NULL;
-	path[j] = '\0';
-	return (path);
+	data->no_path[j] = '\0';
+	return (1);
 }
-// int	set_path(t_data *data, char *s)
-// {
-// 	char	*tmp;
+
+int	is_so(t_data *data)
+{
+	int		i;
+	int		j;
 	
-// 	if (is_path(s))
-// 	{
-// 		tmp = is_no(s);
-// 		data->no_path = ft_strdup(tmp);
-// 		data->all_inside--;
-// 	}
-	// else if (is_path(s) && is_so(s) != NULL)
-	// {
-	// 	tmp = is_so(s);
-	// 	data->so_path = ft_strdup(tmp);
-	// 	data->all_inside--;
-	// }
-	// else if (is_path(s) && is_we(s) != NULL)
-	// {
-	// 	tmp = is_we(s);
-	// 	data->we_path = ft_strdup(tmp);
-	// 	data->all_inside--;
-	// }
-	// else if (is_path(s) && is_ea(s) != NULL)
-	// {
-	// 	tmp = is_ea(s);
-	// 	data->ea_path = ft_strdup(tmp);
-	// 	data->all_inside--;
-	// }
-// 	else
-// 		return (0);
-// 	return (1);
-// }
+	i = 2;
+	if (data->tmp_path[0] != 'S')
+		return (0);
+	if (data->tmp_path[1] != 'O')
+		return (0);
+	while (data->tmp_path[i] == ' ' || data->tmp_path[i] == '\t')
+		i++;
+	data->so_path = malloc(sizeof(char *) * data->len_path);
+	if (!data->so_path)
+		return (0);
+	j = 0;
+	while (data->tmp_path[i] && data->tmp_path[i] != '\t' && data->tmp_path[i] != ' ')
+	{
+		data->so_path[j] = data->tmp_path[i];
+		i++;
+		j++;
+	}
+	data->so_path[j] = '\0';
+	return (1);
+}
+
+int	is_we(t_data *data)
+{
+	int		i;
+	int		j;
+	
+	i = 2;
+	if (data->tmp_path[0] != 'W')
+		return (0);
+	if (data->tmp_path[1] != 'E')
+		return (0);
+	while (data->tmp_path[i] == ' ' || data->tmp_path[i] == '\t')
+		i++;
+	data->we_path = malloc(sizeof(char *) * data->len_path);
+	if (!data->we_path)
+		return (0);
+	j = 0;
+	while (data->tmp_path[i] && data->tmp_path[i] != '\t' && data->tmp_path[i] != ' ')
+	{
+		data->we_path[j] = data->tmp_path[i];
+		i++;
+		j++;
+	}
+	data->we_path[j] = '\0';
+	return (1);
+}
+
+int	is_ea(t_data *data)
+{
+	int		i;
+	int		j;
+	
+	i = 2;
+	if (data->tmp_path[0] != 'E')
+		return (0);
+	if (data->tmp_path[1] != 'A')
+		return (0);
+	while (data->tmp_path[i] == ' ' || data->tmp_path[i] == '\t')
+		i++;
+	data->ea_path = malloc(sizeof(char *) * data->len_path);
+	if (!data->ea_path)
+		return (0);
+	j = 0;
+	while (data->tmp_path[i] && data->tmp_path[i] != '\t' && data->tmp_path[i] != ' ')
+	{
+		data->ea_path[j] = data->tmp_path[i];
+		i++;
+		j++;
+	}
+	data->ea_path[j] = '\0';
+	return (1);
+}
+
+int	set_path(t_data *data)
+{
+	if (is_no(data) && data->no_path)
+		data->no_here++;
+	else if (is_so(data) && data->so_path)
+		data->so_here++;
+	else if (is_ea(data) && data->ea_path)
+		data->ea_here++;
+	else if (is_we(data) && data->we_path)
+		data->we_here++;
+	else
+		return (0);
+	return (1);
+}
 

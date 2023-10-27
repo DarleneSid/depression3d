@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 00:21:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/27 01:30:26 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/28 00:03:58 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	height_of_map(int fd)
 	i = 0;
 	tmp = get_next_line(fd);
 	if (!tmp)
-		return (-1);
+		return (printf("empty:(\n"), -1);
 	if (!invalid_row(tmp))
 		return (free(tmp), printf("What did you put in this map?! Invalid!\n"), 1);
 	while (tmp)
@@ -150,7 +150,7 @@ int	init_map(t_data *data, int fd)
 		tmp = get_next_line(fd);
 	}
 	data->map = map;
-	if (!data->map)
+	if (!data->map || !data->map[0])
 		return (free_dstr(data->map), free(map), close(fd), exit(0), 1);
 	return (0);
 }
@@ -203,9 +203,9 @@ int	all_stuff_map(t_data *data)
 	int			row;
 	
 	row = 0;
-	while (data->map[row])
+	while (data->map && data->map[row])
 	{	
-		while (data->map[row])
+		while (data->map && data->map[row])
 		{
 			if (is_floor(data, data->map[row]) != -1)
 			{
@@ -215,14 +215,14 @@ int	all_stuff_map(t_data *data)
 			{
 				row++;
 			}
-			else if (is_path(data->map[row]))
+			else if (is_path(data, data->map[row]))
 			{
-				// set_path(data, data->map[row]);
+				set_path(data);
 				row++;
 			}
 			else if (data->map[row][0] == '\n')
 				row++;
-			else if (is_floor(data, data->map[row]) == -1 && is_ceiling(data, data->map[row]) == -1 && data->map[row][0] != '\n' &&  invalid_start(data, data->map[row]) && !is_path(data->map[row]))
+			else if (is_floor(data, data->map[row]) == -1 && is_ceiling(data, data->map[row]) == -1 && data->map[row][0] != '\n' &&  invalid_start(data, data->map[row]) && !is_path(data, data->map[row]))
 				return (ft_printf("NOT VALID MAPeeee: (((((%s))))\n", data->map[row]), -1);
 			else if (invalid_start(data, data->map[row]) == 0)
 				break ;
@@ -239,8 +239,34 @@ int	all_stuff_map(t_data *data)
 		else
 			return (ft_printf("NOT VALID MAPtttttt\n"), -1);
 	}
+	printf("%d\n", data->no_here);
+	printf("%d\n", data->so_here);
+	printf("%d\n", data->we_here);
+	printf("%d\n", data->ea_here);
+	printf("%d\n", data->c_here);
+	printf("%d\n", data->f_here);
 	return (0);
 }
+
+int	check_all_inside(t_data *data)
+{
+	if (data->no_here != 1)
+		return (0);
+	else if (data->so_here != 1)
+		return (0);
+	else if (data->we_here != 1)
+		return (0);
+	else if (data->ea_here != 1)
+		return (0);
+	else if (data->c_here != 1)
+		return (0);
+	else if (data->f_here != 1)
+		return (0);
+	else
+		return (1);
+
+}
+
 
 int	parsing(t_data *data, char *file)
 {
@@ -259,6 +285,8 @@ int	parsing(t_data *data, char *file)
 	close(fd);
 	init_whos_here(data);
 	if (all_stuff_map(data) == -1)
+		return (1);
+	if (!check_all_inside(data))
 		return (1);
 	if (check_borders(data) == -1)
 		return (printf("kek not valid\n"), 1);
@@ -283,6 +311,15 @@ int	parsing(t_data *data, char *file)
 	printf("%d\n", data->c_r);
 	printf("%d\n", data->c_g);
 	printf("%d\n", data->c_b);
+	
+
+
+
+	printf("my path no: [[%s]]\n", data->no_path);
+	printf("my path so: [[%s]]\n", data->so_path);
+	printf("my path we: [[%s]]\n", data->we_path);
+	printf("my path ea: [[%s]]\n", data->ea_path);
+	
 	return (0);
 }
 
