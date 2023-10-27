@@ -6,11 +6,21 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/06 00:19:45 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/21 18:49:27 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/27 01:33:11 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cube3d.h"
+
+void	init_whos_here(t_data *data)
+{
+	data->no_here = 0;
+	data->so_here = 0;
+	data->we_here = 0;
+	data->ea_here = 0;
+	data->c_here = 0;
+	data->f_here = 0;
+}
 
 int	main(int ac, char **av)
 {
@@ -25,3 +35,9 @@ int	main(int ac, char **av)
 		return (1);
 	return (0);
 }
+
+
+// check first column, last row, last colum
+//handle spaces after xpm
+// floor ceill - can be spaces between r g b??
+// give to paola clear path to img

@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/17 22:09:26 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/24 23:55:02 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/27 01:28:57 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,17 +15,18 @@
 int	is_floor(t_data *data, char *s)
 {
 	int		i;
-	int		j;
 	char	**ithinkdifferent;
 	int number = 0;
 	int count = 0;
-	i = 2;
-	j = 0;
-	if (s[0] != 'F')
+	
+	i = 0;
+	while (s[i] == ' ' || s[i] == '\t')
+		i++;
+	if (s[i] != 'F')
 		return (-1);
-	if (s[1] != ' ')
+	i++;
+	if (s[i] != ' ')
 		return (-1);
-	// 1 space or ???
 	ithinkdifferent = ft_split(&s[i], ',');
 	if (!ithinkdifferent)
 		return (-1);
@@ -49,17 +50,17 @@ int	is_floor(t_data *data, char *s)
 int	is_ceiling(t_data *data, char *s)
 {
 	int		i;
-	int		j;
 	char	**ithinkdifferent;
 	int number = 0;
 	int count = 0;
-	i = 2;
-	j = 0;
-	if (s[0] != 'C')
+	i = 0;
+	while (s[i] == ' ' || s[i] == '\t')
+		i++;
+	if (s[i] != 'C')
 		return (-1);
-	if (s[1] != ' ')
+	i++;
+	if (s[i] != ' ')
 		return (-1);
-	// 1 space or ???
 	ithinkdifferent = ft_split(&s[i], ',');
 	if (!ithinkdifferent)
 		return (-1);
@@ -103,6 +104,62 @@ int	valid_for_path(char *s)
 }
 
 
+int	is_path(char *s)
+{
+	int i;
+	int	no_spc;
+	int	start;
+	int	end;
+	char	*tmp;
+	
+	i = 0;
+	no_spc = ft_strlen(s) - 1;
+	if (!valid_for_path(s))
+		return (0);
+	if (s[no_spc] == '\n')
+	{
+		s[no_spc] = '\0';
+		no_spc--;
+	}
+	while (s[no_spc] == ' ' || s[no_spc] == '\t')
+		no_spc--;
+	end = no_spc;
+	while (s[i] == ' ' || s[i] == '\t')
+		i++;
+	tmp = malloc(sizeof(char) * (end + 1 - i));
+	if (!tmp)
+		return (0);
+	start = 0;
+	printf("end %d\n", end);
+	printf("i %d\n", i);
+	printf("len %d\n", ft_strlen(s) - 1);
+	printf("no spc %d\n", no_spc);
+	end -= i;
+	while (i <= no_spc && start <= end)
+	{
+		tmp[start] = s[i];
+		start++;
+		i++;
+	}
+	tmp[start] = '\0';
+	printf("now:[%s]\n", tmp);
+	if (ft_strncmp(&tmp[ft_strlen(tmp) - 4], ".xpm\0", 5))
+		return (0);
+	start = 2;
+	while (tmp[start] == ' ' || tmp[start] == '\t')
+		start++;
+	while (end >= start)
+	{
+		if (tmp[start] == ' ' || tmp[start] == '\t')
+			return (0);
+		start++;
+	}
+	if (tmp[start] == '\0')
+		return (1);
+	printf("[%s]\n", &tmp[start]);
+	return (0);
+}
+
 char	*is_no(char *s)
 {
 	int		i;
@@ -131,46 +188,6 @@ char	*is_no(char *s)
 	path[j] = '\0';
 	return (path);
 }
-
-int	is_path(char *s)
-{
-	int i;
-	char	*tmp;
-	
-	
-	printf("my %s\n", s);
-	printf("len %d\n", ft_strlen(s));
-	if (!valid_for_path(s))
-		return (0);
-	if (s[ft_strlen(s) - 1] == '\n')
-		s[ft_strlen(s) - 1] = '\0';
-	tmp = malloc(sizeof(char) * (ft_strlen(s)));
-	if (!tmp)
-		return (0);
-	printf("here\n");
-	i = 0;
-	while (i < (ft_strlen(s)))
-	{
-		tmp[i] = s[i];
-		i++;
-	}
-	tmp[i] = '\0';
-	printf("[%s]", &tmp[ft_strlen(tmp) - 4]);
-	printf("tmp:%s\n", tmp);
-	if (ft_strncmp(&tmp[ft_strlen(tmp) - 4], ".xpm\0", 5))
-		return (0);
-	i = 2;
-	while (tmp[i] == ' ' || tmp[i] == '\t')
-		i++;
-	while (tmp[i])
-	{
-		if (tmp[i] == ' ' || tmp[i] == '\t')
-			return(0);
-		i++;
-	}
-	return (1);
-}
-
 // int	set_path(t_data *data, char *s)
 // {
 // 	char	*tmp;
@@ -204,8 +221,3 @@ int	is_path(char *s)
 // 	return (1);
 // }
 
-//how to check directory???
-//ok i stack all string and? check is it exist or no??
-
-	// if (ft_strncmp(char *path, ".xpm\0", 5))
-	// 	return (ft_printf("Path has to end with .xpm!\n"), 1);

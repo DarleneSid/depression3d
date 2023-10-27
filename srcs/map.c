@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 00:21:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/24 23:44:10 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/27 01:30:26 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,26 +203,21 @@ int	all_stuff_map(t_data *data)
 	int			row;
 	
 	row = 0;
-	data->all_inside = 6;
 	while (data->map[row])
 	{	
 		while (data->map[row])
 		{
-			if (data->map[row][0] != '\n' && is_path(data->map[row]))
+			if (is_floor(data, data->map[row]) != -1)
 			{
-				printf("my row ((%s))", data->map[row]);
-				// set_path(data, data->map[row]);
-				row++;
-			
-			}
-			else if (is_floor(data, data->map[row]) != -1)
-			{
-				data->all_inside--;
 				row++;
 			}
 			else if (is_ceiling(data, data->map[row]) != -1)
 			{
-				data->all_inside--;
+				row++;
+			}
+			else if (is_path(data->map[row]))
+			{
+				// set_path(data, data->map[row]);
 				row++;
 			}
 			else if (data->map[row][0] == '\n')
@@ -262,6 +257,7 @@ int	parsing(t_data *data, char *file)
 	if (init_map(data, fd))
 		return (close(fd), 1);
 	close(fd);
+	init_whos_here(data);
 	if (all_stuff_map(data) == -1)
 		return (1);
 	if (check_borders(data) == -1)
@@ -274,7 +270,7 @@ int	parsing(t_data *data, char *file)
 		printf("%s", data->map[k]);
 		k++;
 	}
-	printf("MY MAP:\n");
+	printf("\n\n\n\n\nMY MAP:\n");
 	k = 0;
 	while (k < data->h_map)
 	{

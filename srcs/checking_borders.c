@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 17:57:31 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/25 00:17:40 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/26 20:57:56 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,16 +75,9 @@ int	check_borders(t_data *data)
 				nospc(data->work_map[x][y - 1]) && nospc(data->work_map[x][y + 1]))
 				y++;
 			else
-				return (printf("suka\n"), -1);
+				return (-1);
 		}
 		x++;
 	}
 	return (0);
 }
-
-
-// check first column, last row, last colum
-//handle spaces after xpm
-//floodfill???
-//islands on map??
-// floor ceill - can be spaces between r g b??
