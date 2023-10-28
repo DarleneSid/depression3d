@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/09 00:21:29 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/28 00:03:58 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/28 23:39:33 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int	init_map(t_data *data, int fd)
 		tmp = get_next_line(fd);
 	}
 	data->map = map;
-	if (!data->map || !data->map[0])
+	if (!data->map)
 		return (free_dstr(data->map), free(map), close(fd), exit(0), 1);
 	return (0);
 }
@@ -196,6 +196,22 @@ char **check_map(t_data *data, int cur_row)
 	else
 		return (ft_printf("NOT VALID MAP\n"), NULL);
 	return (map);
+}
+
+
+int	is_empty(t_data *data)
+{
+	int	row;
+	
+	row = 0;
+	while (row < data->height)
+	{
+		if (data->map[row][0] == '\n')
+			row++;
+		else
+			return (0);
+	}
+	return (printf("still empty:(\n"), exit (0), -1);
 }
 
 int	all_stuff_map(t_data *data)
@@ -283,6 +299,8 @@ int	parsing(t_data *data, char *file)
 	if (init_map(data, fd))
 		return (close(fd), 1);
 	close(fd);
+	if (is_empty(data))
+		return (1);
 	init_whos_here(data);
 	if (all_stuff_map(data) == -1)
 		return (1);

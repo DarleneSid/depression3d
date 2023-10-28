@@ -6,7 +6,7 @@
 /*   By: dsydelny <dsydelny@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 17:57:31 by dsydelny          #+#    #+#             */
-/*   Updated: 2023/10/27 23:25:59 by dsydelny         ###   ########.fr       */
+/*   Updated: 2023/10/29 01:52:18 by dsydelny         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,24 +28,24 @@ int	zero_or_letter(char c)
 		return (0);
 }
 
-void	len_map(t_data *data)
-{
-	int	i;
-	int	j;
+// void	len_map(t_data *data)
+// {
+// 	int	i;
+// 	int	j;
 	
-	i = 0;
-	data->len_map = 0;
-	while (data->work_map[i] && i < data->h_map)
-	{
-		j = 0;
-		while (data->work_map[i][j])
-			j++;
-		if (j > data->len_map)
-			data->len_map = j;
-		printf("%d\n len now", data->len_map);
-		i++;
-	}
-}
+// 	i = 0;
+// 	data->len_map = 0;
+// 	while (data->work_map[i] && i < data->h_map)
+// 	{
+// 		j = 0;
+// 		while (data->work_map[i][j])
+// 			j++;
+// 		if (j > data->len_map)
+// 			data->len_map = j;
+// 		// printf("%d\n len now", data->len_map);
+// 		i++;
+// 	}
+// }
 
 int	nospc(char c)
 {
@@ -76,17 +76,12 @@ int	check_last_column(t_data *data)
 {
 	int	x;
 	int	len;
-	int	height;
 	
 	x = 0;
-	len = data->len_map - 1	;
-	printf("LEN %d\n", len);
-	height = data->h_map - 1;
-	while (data->work_map[x] && x <= height)
+	while (data->work_map[x] && x < data->h_map)
 	{
-		if (!data->work_map[x][len])
-			x++;
-		else if (data->work_map[x][len] == ' ' || data->work_map[x][len] == '1' || data->work_map[x][len] == '\n' || data->work_map[x][len] == '\0')
+		len = ft_strlen(data->work_map[x]) - 1;
+		if (data->work_map[x][len - 1] == ' ' || data->work_map[x][len - 1] == '1' || data->work_map[x][len - 1] == '\n' || data->work_map[x][len - 1] == '\0')
 			x++;
 		else
 			return (-1);
@@ -101,8 +96,8 @@ int	check_last_row(t_data *data)
 	int	height;
 	
 	y = 0;
-	len = data->len_map - 1;
 	height = data->h_map - 1;
+	len = ft_strlen(data->work_map[height]) - 1;
 	while (data->work_map[height][y] && y <= len)
 	{
 		if (data->work_map[height][y] == ' ' || data->work_map[height][y] == '1' || data->work_map[height][y] == '\n')
@@ -122,27 +117,36 @@ int	check_borders(t_data *data)
 	int	len;
 	int	height;
 	
-	len_map(data);
 	printf("%d\n", check_first_column(data));
 	printf("%d\n", check_last_column(data));
 	printf("%d\n", check_last_row(data));
-	if (check_first_column(data) == -1 || check_last_column(data) == -1|| check_last_row(data) == -1)
+	if (check_first_column(data) == -1 || check_last_column(data) == -1 || check_last_row(data) == -1)
 		return (-1);
 	x = 1;
-	len = data->len_map - 1;
 	height = data->h_map - 1;
 	while (data->work_map[x] && x < height)
 	{
+		len = ft_strlen(data->work_map[x]) - 1;
 		y = 1;
-		while (data->work_map[x][y] && y < len)
+		printf("row [%s], %d\n", data->work_map[x], len);
+		while (data->work_map[x][y] && data->work_map[x - 1][y] && data->work_map[x + 1][y] && y < len)
 		{
 			if (data->work_map[x][y] == ' ' || data->work_map[x][y] == '1' || data->work_map[x][y] == '\n')
 				y++;
-			else if (x > zero_or_letter(data->work_map[x][y]) &&  nospc(data->work_map[x - 1][y]) && nospc(data->work_map[x + 1][y]) &&
+			// else if ()
+			else if (zero_or_letter(data->work_map[x][y]) && nospc(data->work_map[x - 1][y]) && nospc(data->work_map[x + 1][y]) &&
 				nospc(data->work_map[x][y - 1]) && nospc(data->work_map[x][y + 1]))
 				y++;
 			else
 				return (-1);
+		}
+		while (data->work_map[x][y] && ((ft_strlen(data->work_map[x - 1]) < len || ft_strlen(data->work_map[x + 1]) < len) ||
+			(ft_strlen(data->work_map[x - 1]) < len && ft_strlen(data->work_map[x + 1]) < len)) && y < len)
+		{
+			if (zero_or_letter(data->work_map[x][y]))
+				return (printf("this suka\n"), -1);
+			else
+				y++;
 		}
 		x++;
 	}
